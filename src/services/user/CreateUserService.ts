@@ -28,10 +28,13 @@ class CreateUserService{
                 name: name,
                 email: email,
                 password: hashPassword,
+            },
+            omit: {
+                password: true
             }
         })
 
-        return user.name
+        return user
     }
 }
 
