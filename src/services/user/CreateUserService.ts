@@ -21,20 +21,28 @@ class CreateUserService{
             throw new Error("User alredy exists")
         }
 
-        const hashPassword = await hash(password, 8)
+        try{
+            
+            const hashPassword = await hash(password, 8)
 
-        const user = await prismaClient.user.create({
-            data: {
-                name: name,
-                email: email,
-                password: hashPassword,
-            },
-            omit: {
-                password: true
-            }
-        })
+            const user = await prismaClient.user.create({
+                data: {
+                    name: name,
+                    email: email,
+                    password: hashPassword,
+                },
+                omit: {
+                    password: true,
+                    updated_at: true,
+                }
+            })
 
-        return user
+            return user
+
+        } catch (error){
+            throw new Error("Error creating user.")
+        }
+
     }
 }
 
