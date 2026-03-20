@@ -6,10 +6,11 @@ interface CreateUserProps {
     name: string
     email: string
     password: string
+    confirm_password: string
 }
 
 class CreateUserService{
-    async execute({ name, email, password }: CreateUserProps){
+    async execute({ name, email, password, confirm_password }: CreateUserProps){
         
         const userAlredyExists = await prismaClient.user.findFirst({
             where: {
@@ -19,6 +20,10 @@ class CreateUserService{
 
         if (userAlredyExists){
             throw new Error("User alredy exists")
+        }
+
+        if (password !== confirm_password){
+            throw new Error("Passwords do not match")
         }
 
         try{
@@ -40,7 +45,7 @@ class CreateUserService{
             return user
 
         } catch (error){
-            throw new Error("Error creating user.")
+            throw new Error("Error creating user." + error)
         }
 
     }
