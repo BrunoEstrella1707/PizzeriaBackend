@@ -3,6 +3,7 @@ import { CreateUserController } from './controllers/user/CreateUserController'
 import { AuthUserController } from './controllers/user/AuthUserController'
 import { DetailUserController, DetailAnotherUserController } from './controllers/user/DetailUserController'
 import { CreateCategoryController } from './controllers/category/CreateCategoryController'
+import { ListCategoryController } from './controllers/category/ListCategoryController'
 import { authUserSchema, createUserSchema } from './schemas/userSchema'
 import { createCategorySchema } from './schemas/categorySchema'
 import { validateSchema } from './middlewares/validateSchema'
@@ -43,6 +44,13 @@ router.post(
     isAdmin,
     validateSchema(createCategorySchema),
     new CreateCategoryController().handle
+)
+
+router.get(
+    '/categories',
+    auth,
+    isAdmin,
+    new ListCategoryController().handle
 )
 
 export { router }
