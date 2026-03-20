@@ -38,7 +38,7 @@ model Product {
   name String
   price Int
   description String?
-  banner String
+  banner String?
   disabled Boolean @default(false)
   category_id Int
   category Category @relation(fields:[category_id], references:[id], onDelete: Cascade)
