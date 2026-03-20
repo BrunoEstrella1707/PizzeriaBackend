@@ -49,7 +49,6 @@ router.post(
 router.get(
     '/categories',
     auth,
-    isAdmin,
     new ListCategoryController().handle
 )
 
