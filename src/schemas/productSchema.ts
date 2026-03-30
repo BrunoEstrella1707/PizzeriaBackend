@@ -9,3 +9,14 @@ export const createProductSchema = z.object({
         category_id: z.int({message: "Enter a valid category."})
     })
 })
+
+
+export const listProductSchema = z.object({
+    query: z.object({
+        disabled: z
+        .enum(['true', 'false'], {message: "Disabled must be true or false."})
+        .optional()
+        .default('false')
+        .transform((value) => value === 'true')
+    }),
+})
