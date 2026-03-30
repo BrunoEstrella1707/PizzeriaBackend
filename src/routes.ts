@@ -5,9 +5,10 @@ import { DetailUserController, DetailAnotherUserController } from './controllers
 import { CreateCategoryController } from './controllers/category/CreateCategoryController'
 import { ListCategoryController } from './controllers/category/ListCategoryController'
 import { CreateProductController } from './controllers/product/CreateProductController'
+import { ListProductController } from './controllers/product/ListProductController'
 import { authUserSchema, createUserSchema } from './schemas/userSchema'
 import { createCategorySchema } from './schemas/categorySchema'
-import { createProductSchema } from './schemas/productSchema'
+import { createProductSchema, listProductSchema } from './schemas/productSchema'
 import { validateSchema } from './middlewares/validateSchema'
 import { auth } from './middlewares/auth'
 import { isAdmin } from './middlewares/isAdmin'
@@ -61,6 +62,13 @@ router.post(
     isAdmin,
     validateSchema(createProductSchema),
     new CreateProductController().handle
+)
+
+router.get(
+    '/products',
+    auth,
+    validateSchema(listProductSchema),
+    new ListProductController().handle
 )
 
 export { router }
