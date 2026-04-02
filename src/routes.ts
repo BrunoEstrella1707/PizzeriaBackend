@@ -6,6 +6,7 @@ import { CreateCategoryController } from './controllers/category/CreateCategoryC
 import { ListCategoryController } from './controllers/category/ListCategoryController'
 import { CreateProductController } from './controllers/product/CreateProductController'
 import { ListProductController } from './controllers/product/ListProductController'
+import { DeleteProductController } from './controllers/product/DeleteProductController'
 import { authUserSchema, createUserSchema } from './schemas/userSchema'
 import { createCategorySchema } from './schemas/categorySchema'
 import { createProductSchema, listProductSchema } from './schemas/productSchema'
@@ -69,6 +70,13 @@ router.get(
     auth,
     validateSchema(listProductSchema),
     new ListProductController().handle
+)
+
+router.delete(
+    '/products/:product_id',
+    auth,
+    isAdmin,
+    new DeleteProductController().handle
 )
 
 export { router }
