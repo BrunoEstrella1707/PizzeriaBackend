@@ -13,7 +13,7 @@ export function auth(req: Request, res: Response, next: NextFunction){
     const authToken = req.headers.authorization
 
     if (!authToken){
-        res.status(401).json({ error: "Token not provided" })
+        throw new Error("Token not provided.")
     }
 
     try{
