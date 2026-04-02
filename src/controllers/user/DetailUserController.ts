@@ -11,7 +11,7 @@ class DetailUserController{
 
         const user = await detailUserService.execute(user_id)
 
-        res.json(user)
+        res.status(200).json(user)
 
     }
 }
@@ -26,7 +26,7 @@ class DetailAnotherUserController{
 
         const user = await detailUserService.execute(Number(user_id))
 
-        res.json(user)
+        res.status(200).json(user)
 
     }
 }
