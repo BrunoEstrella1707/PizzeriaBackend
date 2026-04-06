@@ -2,11 +2,13 @@ import { Router } from 'express'
 import { CreateUserController } from './controllers/user/CreateUserController'
 import { AuthUserController } from './controllers/user/AuthUserController'
 import { DetailUserController, DetailAnotherUserController } from './controllers/user/DetailUserController'
+import { ListUserController } from './controllers/user/ListUserController'
 import { CreateCategoryController } from './controllers/category/CreateCategoryController'
 import { ListCategoryController } from './controllers/category/ListCategoryController'
 import { CreateProductController } from './controllers/product/CreateProductController'
 import { ListProductController } from './controllers/product/ListProductController'
 import { DeleteProductController } from './controllers/product/DeleteProductController'
+import { DisableProductController } from './controllers/product/DisableProductController'
 import { authUserSchema, createUserSchema } from './schemas/userSchema'
 import { createCategorySchema } from './schemas/categorySchema'
 import { createProductSchema, listProductSchema } from './schemas/productSchema'
@@ -43,6 +45,13 @@ router.get(
     new DetailAnotherUserController().handle
 )
 
+router.get(
+    '/users',
+    auth,
+    isAdmin,
+    new ListUserController().handle
+)
+
 router.post(
     '/categories',
     auth,
@@ -77,6 +86,13 @@ router.delete(
     auth,
     isAdmin,
     new DeleteProductController().handle
+)
+
+router.patch(
+    '/products/:product_id',
+    auth,
+    isAdmin,
+    new DisableProductController().handle
 )
 
 export { router }
