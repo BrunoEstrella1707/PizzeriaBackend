@@ -17,6 +17,7 @@ export const listProductSchema = z.object({
         .enum(['true', 'false'], {message: "Disabled must be true or false."})
         .optional()
         .default('false')
-        .transform((value) => value === 'true')
+        .transform((value) => value === 'true'),
+        category_id: z.string({message: "Enter a valid category."}).optional()
     }),
 })
