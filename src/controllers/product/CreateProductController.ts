@@ -12,7 +12,7 @@ class CreateProductController{
         const product = await createProductService.execute({
             name: name,
             price: price,
-            description: description,
+            description: description ?? "",
             category_id: category_id,
         })
 
