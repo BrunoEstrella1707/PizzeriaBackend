@@ -8,11 +8,16 @@ interface ListProductProps {
 
 class ListProductService {
     async execute({ disabled, category_id }: ListProductProps){
+        
+        if (category_id !== undefined){
+            category_id = Number(category_id)
+        }
+
         try{
             const products = await prismaClient.product.findMany({
                 where: {
                     disabled: disabled === 'true' ? true : false,
-                    category_id: Number(category_id),
+                    category_id: category_id,
                 }
             })
 
