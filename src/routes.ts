@@ -10,10 +10,11 @@ import { ListProductController } from './controllers/product/ListProductControll
 import { DeleteProductController } from './controllers/product/DeleteProductController'
 import { DisableProductController } from './controllers/product/DisableProductController'
 import { CreateOrderController } from './controllers/order/CreateOrderController'
+import { ListOrderController } from './controllers/order/ListOrderController'
 import { authUserSchema, createUserSchema } from './schemas/userSchema'
 import { createCategorySchema } from './schemas/categorySchema'
 import { createProductSchema, listProductSchema } from './schemas/productSchema'
-import { createOrderSchema } from './schemas/orderSchema'
+import { createOrderSchema, listOrderSchema } from './schemas/orderSchema'
 import { validateSchema } from './middlewares/validateSchema'
 import { auth } from './middlewares/auth'
 import { isAdmin } from './middlewares/isAdmin'
@@ -102,6 +103,13 @@ router.post(
     auth,
     validateSchema(createOrderSchema),
     new CreateOrderController().handle
+)
+
+router.get(
+    '/orders',
+    auth,
+    validateSchema(listOrderSchema),
+    new ListOrderController().handle
 )
 
 export { router }
