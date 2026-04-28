@@ -9,9 +9,11 @@ import { CreateProductController } from './controllers/product/CreateProductCont
 import { ListProductController } from './controllers/product/ListProductController'
 import { DeleteProductController } from './controllers/product/DeleteProductController'
 import { DisableProductController } from './controllers/product/DisableProductController'
+import { CreateOrderController } from './controllers/order/CreateOrderController'
 import { authUserSchema, createUserSchema } from './schemas/userSchema'
 import { createCategorySchema } from './schemas/categorySchema'
 import { createProductSchema, listProductSchema } from './schemas/productSchema'
+import { createOrderSchema } from './schemas/orderSchema'
 import { validateSchema } from './middlewares/validateSchema'
 import { auth } from './middlewares/auth'
 import { isAdmin } from './middlewares/isAdmin'
@@ -93,6 +95,13 @@ router.patch(
     auth,
     isAdmin,
     new DisableProductController().handle
+)
+
+router.post(
+    '/orders/',
+    auth,
+    validateSchema(createOrderSchema),
+    new CreateOrderController().handle
 )
 
 export { router }
