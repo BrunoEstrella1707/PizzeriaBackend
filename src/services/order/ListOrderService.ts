@@ -19,6 +19,7 @@ class ListOrderService {
                     id: true,
                     table: true, 
                     name: true,
+                    observation: true,
                     draft: true,
                     status: true,
                     created_at: true,

@@ -5,6 +5,7 @@ export const createOrderSchema = z.object({
     body: z.object({
         table: z.int().min(1, {message: "Table number must be greater than 0."}),
         name: z.string().min(3, {message: "Table name must have more than 3 letters."}).optional(),
+        observation: z.string().optional(),
 
     })
 })
