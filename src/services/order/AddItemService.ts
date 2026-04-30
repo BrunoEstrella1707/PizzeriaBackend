@@ -7,57 +7,69 @@ interface AddItemProps {
     amount: number,
 }
 
+type AddItemInput = AddItemProps | AddItemProps[]
+
 
 class AddItemService {
-    async execute({ order_id, product_id, amount }: AddItemProps) {
+    async execute(input: AddItemInput) {
+        // Normalize input to always be an array
+        const items = Array.isArray(input) ? input : [input]
+        const isSingleItem = !Array.isArray(input)
 
-        const orderExists = await prismaClient.order.findFirst({
-            where: {
-                id: order_id
-            }
+        // Validate all orders and products exist
+        const orderIds = [...new Set(items.map(item => item.order_id))]
+        const productIds = [...new Set(items.map(item => item.product_id))]
+
+        const orders = await prismaClient.order.findMany({
+            where: { id: { in: orderIds } }
         })
 
-        if (!orderExists){
-            throw new Error("Order not found")
+        if (orders.length !== orderIds.length) {
+            throw new Error("One or more orders not found")
         }
 
-        const productExists = await prismaClient.product.findFirst({
+        const products = await prismaClient.product.findMany({
             where: {
-                id: product_id,
+                id: { in: productIds },
                 disabled: false,
             }
         })
-        
-        if (!productExists){
-            throw new Error("Product not found")
+
+        if (products.length !== productIds.length) {
+            throw new Error("One or more products not found or are disabled")
         }
 
         try {
-            const item = await prismaClient.item.create({
-                data: {
-                    order_id: order_id,
-                    product_id: product_id,
-                    amount: amount,
-                },
-                select: {
-                    id: true,
-                    order_id: true,
-                    product_id: true,
-                    amount: true,
-                    product:{
+            const createdItems = await Promise.all(
+                items.map(item =>
+                    prismaClient.item.create({
+                        data: {
+                            order_id: item.order_id,
+                            product_id: item.product_id,
+                            amount: item.amount,
+                        },
                         select: {
-                            name: true,
-                            price: true,
-                            description: true
+                            id: true,
+                            order_id: true,
+                            product_id: true,
+                            amount: true,
+                            product: {
+                                select: {
+                                    name: true,
+                                    price: true,
+                                    description: true
+                                }
+                            },
                         }
-                    },
-                }
-            })
+                    })
+                )
+            )
 
-            return item
+            // Return single item or array based on input type
+            return isSingleItem ? createdItems[0] : createdItems
 
-        } catch (error){
-            throw new Error("Error adding item to order" + error)
+        } catch (error) {
+            throw new Error("Error adding item to order: " + error)
         }
 
     }
