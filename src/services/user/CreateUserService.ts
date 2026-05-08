@@ -9,8 +9,19 @@ interface CreateUserProps {
     confirm_password: string
 }
 
-class CreateUserService{
-    async execute({ name, email, password, confirm_password }: CreateUserProps){
+interface CreateUserResponse {
+    name: string;
+    email: string;
+    role: string;
+    created_at: Date;
+    id: number;
+}
+export interface ICreateUserService {
+    execute(props: CreateUserProps): Promise<CreateUserResponse>
+}
+
+class CreateUserService implements ICreateUserService{
+    async execute({ name, email, password, confirm_password }: CreateUserProps): Promise<CreateUserResponse>{
         
         const userAlredyExists = await prismaClient.user.findFirst({
             where: {
