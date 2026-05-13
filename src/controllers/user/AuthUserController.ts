@@ -1,15 +1,14 @@
 import {Request, Response} from 'express'
-import { AuthUserService } from '../../services/user/AuthUserService'
+import { IAuthUserService } from '../../services/user/AuthUserService'
 
 
 class AuthUserController{
+    constructor(private authUserService: IAuthUserService){}
     async handle(req: Request, res: Response ){
 
         const {email, password} = req.body
 
-        const authUserService = new AuthUserService()
-
-        const authUser = await authUserService.execute({
+        const authUser = await this.authUserService.execute({
             email: email,
             password: password,
         })

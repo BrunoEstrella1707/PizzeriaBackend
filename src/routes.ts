@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { CreateUserService } from './services/user/CreateUserService'
+import { AuthUserService } from './services/user/AuthUserService'
 import { CreateUserController } from './controllers/user/CreateUserController'
 import { AuthUserController } from './controllers/user/AuthUserController'
 import { DetailUserController, DetailAnotherUserController } from './controllers/user/DetailUserController'
@@ -23,10 +24,13 @@ import { auth } from './middlewares/auth'
 import { isAdmin } from './middlewares/isAdmin'
 
 
-
 const router = Router()
+
 const createUserService = new CreateUserService()
 const createUserController = new CreateUserController(createUserService)
+
+const authUserService = new AuthUserService()
+const authUserController = new AuthUserController(authUserService)
 
 router.post(
     '/users', 
@@ -37,7 +41,7 @@ router.post(
 router.post(
     '/login',
     validateSchema(authUserSchema),
-    new AuthUserController().handle
+    (req, res) => authUserController.handle(req, res)
 )
 
 router.get(

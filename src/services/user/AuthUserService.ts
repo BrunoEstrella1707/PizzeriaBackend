@@ -10,8 +10,21 @@ interface AuthUserProps {
     password: string
 }
 
-class AuthUserService{
-    async execute({ email, password }: AuthUserProps){
+interface AuthUserResponse {
+    id: number
+    name: string
+    email: string
+    role: string
+    token: string
+}
+
+
+export interface IAuthUserService {
+    execute(props: AuthUserProps): Promise<AuthUserResponse>
+}
+
+class AuthUserService implements IAuthUserService{
+    async execute({ email, password }: AuthUserProps): Promise<AuthUserResponse>{
 
         const user = await prismaClient.user.findUnique({
             where: {
