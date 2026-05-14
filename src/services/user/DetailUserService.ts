@@ -1,8 +1,20 @@
 import prismaClient from "../../prisma/index"
 
+export interface DetailUserResponse {
+    id: number;
+    email: string;
+    name: string;
+    role: string;
+    created_at: Date;
+    updated_at: Date;
+}
 
-class DetailUserService {
-    async execute(userId: number) {
+
+export interface IDetailUserService {
+    execute(userId: number): Promise<DetailUserResponse>
+}
+class DetailUserService implements IDetailUserService {
+    async execute(userId: number): Promise<DetailUserResponse> {
         try{
             const user = await prismaClient.user.findUnique({
                 where: {
