@@ -1,8 +1,12 @@
 import prismaClient from '../../prisma/index'
+import { DetailUserResponse } from './DetailUserService'
 
 
-class ListUserService {
-    async execute(){
+export interface IListUserService {
+    execute(): Promise<DetailUserResponse[]>
+}
+class ListUserService implements IListUserService {
+    async execute(): Promise<DetailUserResponse[]>{
         const users = await prismaClient.user.findMany({
             omit: {
                 password: true
